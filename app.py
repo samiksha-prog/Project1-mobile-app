@@ -4,11 +4,18 @@ import pickle
 import cv2
 from tensorflow.keras.utils import load_img
 from tensorflow.keras.utils import img_to_array
+from tensorflow.keras.models import model_from_json
 from keras.applications.vgg16 import preprocess_input
 
 
 model = pickle.load(open('model.pkl','rb'))
-vgg_model = pickle.load(open('vgg_model.pkl','rb'))
+# load json and create model
+json_file = open('vgg_model.json', 'r')
+vgg_model_json = json_file.read()
+json_file.close()
+vgg_model = model_from_json(vgg_model_json)
+# load weights into new model
+vgg_model.load_weights("vgg_model.h5")
 
 app = Flask(__name__)
 
